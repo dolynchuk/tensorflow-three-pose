@@ -24,6 +24,12 @@
     height: 240px;
 }
 
+@media screen and (max-width: 1000px) {
+    .videoCanvas {
+        display: none;
+    }
+}
+
 
 .controlsButton {
     background: white !important;
