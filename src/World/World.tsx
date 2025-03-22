@@ -87,7 +87,7 @@ function generateNoiseTexture(width: number, height: number) {
 
 
 const Speaker = ({ position }: {position: number[]}) => {
-  const { scene } = useGLTF('/Speaker.glb'); // Adjust the path to your .glb file
+  const { scene } = useGLTF('/portfolio/Speaker.glb'); // Adjust the path to your .glb file
   
   if (!scene) {
     console.error('Model not loaded properly');
@@ -104,7 +104,7 @@ const Speaker = ({ position }: {position: number[]}) => {
 };
 
 const Speaker2 = ({ position }: {position: number[]}) => {
-  const { scene } = useGLTF('/Speaker2.glb'); // Adjust the path to your .glb file
+  const { scene } = useGLTF('/portfolio/Speaker2.glb'); // Adjust the path to your .glb file
   
   if (!scene) {
     console.error('Model not loaded properly');
@@ -121,7 +121,7 @@ const Speaker2 = ({ position }: {position: number[]}) => {
 };
 
 const DJGear = ({ position }: {position: number[]}) => {
-  const { scene } = useGLTF('/DJgear.glb'); // Adjust the path to your .glb file
+  const { scene } = useGLTF('/portfolio/DJgear.glb'); // Adjust the path to your .glb file
   
   if (!scene) {
     console.error('Model not loaded properly');
@@ -138,7 +138,7 @@ const DJGear = ({ position }: {position: number[]}) => {
 };
 
 const Table = ({ position }: {position: number[]}) => {
-  const { scene } = useGLTF('/Table.glb'); // Adjust the path to your .glb file
+  const { scene } = useGLTF('/portfolio/Table.glb'); // Adjust the path to your .glb file
   
   if (!scene) {
     console.error('Model not loaded properly');
@@ -155,15 +155,14 @@ const Table = ({ position }: {position: number[]}) => {
   );
 };
 
-
 export function World() {
-  const groundTexture = useLoader(THREE.TextureLoader, '/ground.jpg');
+  const groundTexture = useLoader(THREE.TextureLoader, '/portfolio/ground.jpg');
 
-  const wallColorTexture = useLoader(THREE.TextureLoader, '/wall_Color.jpg');
-  const wallAoTexture = useLoader(THREE.TextureLoader, '/wall_AmbientOcclusion.jpg');
-  const wallDisplacementTexture = useLoader(THREE.TextureLoader, '/wall_Displacement.jpg');
-  const wallRoughnessTexture = useLoader(THREE.TextureLoader, '/wall_Roughness.jpg');
-  const wallNormalTexture = useLoader(THREE.TextureLoader, '/wall_Normal.jpg');
+  const wallColorTexture = useLoader(THREE.TextureLoader, '/portfolio/wall_Color.jpg');
+  const wallAoTexture = useLoader(THREE.TextureLoader, '/portfolio/wall_AmbientOcclusion.jpg');
+  const wallDisplacementTexture = useLoader(THREE.TextureLoader, '/portfolio/wall_Displacement.jpg');
+  const wallRoughnessTexture = useLoader(THREE.TextureLoader, '/portfolio/wall_Roughness.jpg');
+  const wallNormalTexture = useLoader(THREE.TextureLoader, '/portfolio/wall_Normal.jpg');
 
   const wallRepeatX = 6;
   const wallRepeatY = 2;
