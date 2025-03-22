@@ -7,7 +7,10 @@ import * as tf from "@tensorflow/tfjs-core";
 import "@tensorflow/tfjs-backend-webgl";
 import * as poseDetection from '@tensorflow-models/pose-detection';
 
+const base = '/tensorflow-three-pose/';
+
 export const UserVideo = () => {
+
   const {
     videoStream,
     stopVideo,
@@ -116,7 +119,7 @@ export const UserVideo = () => {
       <canvas ref={canvasRef} width={VIDEO_CONFIG.width} height={VIDEO_CONFIG.height} />
       <div className="userVideoControls">
         <button className={`controlsButton ${isLoading ? 'loading' : ''}`} onClick={handleVideoToggle} disabled={isLoading}>
-          {isLoading ? <img src="/loading.svg"/> :  videoEnabled ? <img src="/video-on.svg" /> : <img src="/video-off.svg" />}
+          {isLoading ? <img src={`${base}loading.svg`}/> :  videoEnabled ? <img src={`${base}video-on.svg`} /> : <img src={`${base}video-off.svg`} />}
         </button>
         {/* <button disabled={isLoading} className={`controlsButton ${isLoading ? 'loading' : ''}`} onClick={() => isMuted ? unmuteAudio() : muteAudio()}>
           {isMuted ? <img src="/audio-off.svg" /> : <img src="/audio-on.svg" />}
