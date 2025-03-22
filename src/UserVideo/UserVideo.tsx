@@ -116,7 +116,7 @@ export const UserVideo = () => {
   return (
     <div className="userVideo">
       <video ref={videoRef} width={VIDEO_CONFIG.width} height={VIDEO_CONFIG.height} muted={isMuted} className="videoHidden" autoPlay />
-      <canvas ref={canvasRef} width={VIDEO_CONFIG.width} height={VIDEO_CONFIG.height} />
+      <canvas className="videoCanvas" ref={canvasRef} width={VIDEO_CONFIG.width} height={VIDEO_CONFIG.height} />
       <div className="userVideoControls">
         <button className={`controlsButton ${isLoading ? 'loading' : ''}`} onClick={handleVideoToggle} disabled={isLoading}>
           {isLoading ? <img src={`${base}loading.svg`}/> :  videoEnabled ? <img src={`${base}video-on.svg`} /> : <img src={`${base}video-off.svg`} />}
