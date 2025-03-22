@@ -1,0 +1,46 @@
+.userVideo {
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    border: 4px solid black;
+    position: relative;
+}
+
+.userVideoControls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 8px;
+    gap: 8px;
+}
+
+
+.videoCanvas {
+    width: 320px;
+    height: 240px;
+}
+
+
+.controlsButton {
+    background: white !important;
+}
+
+.controlsButton:hover {
+    background: white !important;
+}
+
+.controlsButton img {
+    height: 48px;
+}
+
+.controlsButton.loading {
+    background-color: gray;
+}
+
+.videoHidden {
+    display: none;
+}

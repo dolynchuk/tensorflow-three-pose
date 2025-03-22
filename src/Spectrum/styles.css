@@ -1,0 +1,12 @@
+.spectrum {
+    border-radius: 16px;
+    border: 2px solid black;
+    overflow: hidden;
+    display: flex;
+    height: 100px;
+}
+
+.spectrumCanvas {
+    width: 100%;
+    height: 100px;
+}

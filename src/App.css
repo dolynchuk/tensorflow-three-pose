@@ -1,0 +1,19 @@
+#root {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  height: 100vh;
+}
+
+main {
+  height: 100vh;
+}
+
+.userContainer {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
