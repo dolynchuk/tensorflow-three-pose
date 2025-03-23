@@ -121,6 +121,9 @@ export const UserVideo = () => {
 
   return (
     <div className="userVideo">
+      {
+        !videoEnabled && <p className="videoDisabledMessage">Enable video to use this demo</p>
+      }
       <video ref={videoRef} width={VIDEO_CONFIG.width} height={VIDEO_CONFIG.height} muted={isMuted} className="videoHidden" autoPlay />
       <canvas className="videoCanvas" ref={canvasRef} width={VIDEO_CONFIG.width} height={VIDEO_CONFIG.height} />
       <div className="userVideoControls">

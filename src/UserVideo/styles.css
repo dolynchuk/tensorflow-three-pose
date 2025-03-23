@@ -4,6 +4,7 @@
     display: flex;
     border: 4px solid black;
     position: relative;
+    backdrop-filter: blur(10px);
 }
 
 .userVideoControls {
@@ -38,6 +39,12 @@
     }
 }
 
+.videoDisabledMessage {
+    display: flex;
+    padding: 8px;
+    height: 100%;
+    color: white;
+}
 
 .controlsButton {
     background: white !important;
