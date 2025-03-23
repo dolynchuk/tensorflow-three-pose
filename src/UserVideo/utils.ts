@@ -1,5 +1,4 @@
 import { Keypoint, } from "@tensorflow-models/pose-detection";
-import { VAR_POSE_HISTORY } from "../inMemory";
 
 export const VIDEO_CONFIG = {
   width: 640,
@@ -25,32 +24,6 @@ export function calculateAngle(p1: Keypoint, p2: Keypoint) {
   const dx = p2.x - p1.x;
   const dy = p2.y - p1.y;
   return Math.atan2(-dy, dx);
-}
-
-export async function flipVideo(videoElement: HTMLVideoElement, canvasElement: HTMLCanvasElement) {
-  try {
-    const ctx = canvasElement.getContext("2d");
-    if (!ctx) throw new Error("Canvas context not available");
-
-    canvasElement.width = videoElement.videoWidth;
-    canvasElement.height = videoElement.videoHeight;
-
-    function drawFlippedFrame() {
-      if (!ctx) throw new Error("Canvas context not available");
-      ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-      ctx.save();
-      ctx.scale(-1, 1);
-      ctx.drawImage(videoElement, -canvasElement.width, 0);
-      ctx.restore();
-      requestAnimationFrame(drawFlippedFrame);
-    }
-
-    drawFlippedFrame();
-    return canvasElement.captureStream(30);
-  } catch (error) {
-    console.error("Error flipping video:", error);
-    throw error;
-  }
 }
 
 export function drawKeypoints(
@@ -104,7 +77,7 @@ export function drawSkeleton(
   });
 }
 
-export function drawPoses(canvas: HTMLCanvasElement, video: HTMLVideoElement) {
+export function drawFlippedVideo(canvas: HTMLCanvasElement, video: HTMLVideoElement) {
   if (!canvas || !video || video.videoWidth === 0 || video.videoHeight === 0) return;
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
@@ -114,25 +87,4 @@ export function drawPoses(canvas: HTMLCanvasElement, video: HTMLVideoElement) {
   ctx.scale(-1, 1);
   ctx.drawImage(video, -VIDEO_CONFIG.width, 0, VIDEO_CONFIG.width, VIDEO_CONFIG.height);
   ctx.restore();
-
-  const smoothedPoses = computeSmoothedPoses();
-  smoothedPoses.forEach((pose) => {
-    drawKeypoints(pose.keypoints, 0.5, ctx);
-    drawSkeleton(pose.keypoints, 0.5, ctx);
-  });
-}
-
-function computeSmoothedPoses() {
-  if (!VAR_POSE_HISTORY.length) return [];
-  const latestPoses = VAR_POSE_HISTORY[VAR_POSE_HISTORY.length - 1];
-
-  return latestPoses.map((pose) => {
-    const smoothedKeypoints = pose.keypoints.map((keypoint, i) => {
-      const positions = VAR_POSE_HISTORY.map((poses) => poses[i]?.keypoints[i] || keypoint);
-      const avgX = positions.reduce((sum, p) => sum + p.x, 0) / positions.length;
-      const avgY = positions.reduce((sum, p) => sum + p.y, 0) / positions.length;
-      return { ...keypoint, x: avgX, y: avgY };
-    });
-    return { ...pose, keypoints: smoothedKeypoints };
-  });
 }

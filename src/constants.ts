@@ -1,0 +1,1 @@
+export const BASE = '/tensorflow-three-pose/';

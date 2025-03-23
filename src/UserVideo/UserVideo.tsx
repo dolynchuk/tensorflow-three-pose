@@ -1,13 +1,12 @@
 import { useContext, useRef, useEffect, useCallback, useState } from "react";
 import { UserStreamContext } from "../UserStreamContext";
 import "./styles.css";
-import { updatePoseHistory, updatePose } from "../inMemory";
-import { drawPoses, VIDEO_CONFIG } from "./utils";
+import { updatePose } from "../inMemory";
+import { drawFlippedVideo, VIDEO_CONFIG } from "./utils";
 import * as tf from "@tensorflow/tfjs-core";
 import "@tensorflow/tfjs-backend-webgl";
 import * as poseDetection from '@tensorflow-models/pose-detection';
-
-const base = '/tensorflow-three-pose/';
+import { BASE } from "../constants";
 
 export const UserVideo = () => {
 
@@ -48,10 +47,9 @@ export const UserVideo = () => {
 
     if (poses[0]){
       updatePose(poses[0]);
-      updatePoseHistory(poses);
     }
 
-    drawPoses(canvasRef.current, videoRef.current);
+    drawFlippedVideo(canvasRef.current, videoRef.current);
     animationFrameIdRef.current = requestAnimationFrame(detectPoses);
   }, []);
 
@@ -119,11 +117,8 @@ export const UserVideo = () => {
       <canvas className="videoCanvas" ref={canvasRef} width={VIDEO_CONFIG.width} height={VIDEO_CONFIG.height} />
       <div className="userVideoControls">
         <button className={`controlsButton ${isLoading ? 'loading' : ''}`} onClick={handleVideoToggle} disabled={isLoading}>
-          {isLoading ? <img src={`${base}loading.svg`}/> :  videoEnabled ? <img src={`${base}video-on.svg`} /> : <img src={`${base}video-off.svg`} />}
+          {isLoading ? <img src={`${BASE}loading.svg`}/> :  videoEnabled ? <img src={`${BASE}video-on.svg`} /> : <img src={`${BASE}video-off.svg`} />}
         </button>
-        {/* <button disabled={isLoading} className={`controlsButton ${isLoading ? 'loading' : ''}`} onClick={() => isMuted ? unmuteAudio() : muteAudio()}>
-          {isMuted ? <img src="/audio-off.svg" /> : <img src="/audio-on.svg" />}
-        </button> */}
       </div>
     </div>
   );
