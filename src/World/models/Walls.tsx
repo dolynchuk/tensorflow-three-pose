@@ -2,9 +2,9 @@ import { useLoader } from "@react-three/fiber";
 import { RepeatWrapping, TextureLoader } from "three";
 import { BASE } from "../../constants";
 
-const wallHeight = 2; 
+export const WALL_HEIGHT = 3; 
 const wallRepeatX = 6;
-const wallRepeatY = 2;
+const wallRepeatY = 3;
 
 type Props = {
     halfDepth: number;
@@ -50,9 +50,9 @@ export function Walls({halfDepth, halfWidth}: Props){
 
 
     return <>
-          {createWall([0, 0, -halfDepth], 10, wallHeight, 0.1)} // Front wall
-        {createWall([0, 0, halfDepth], 10, wallHeight, 0.1)} // Back wall
-        {createWall([-halfWidth, 0, 0], 0.1, wallHeight, 10)} // Left wall
-        {createWall([halfWidth, 0, 0], 0.1, wallHeight, 10)} // Right wall
+          {createWall([0, 0, -halfDepth], 10, WALL_HEIGHT, 0.1)} // Front wall
+        {createWall([0, 0, halfDepth], 10, WALL_HEIGHT, 0.1)} // Back wall
+        {createWall([-halfWidth, 0, 0], 0.1, WALL_HEIGHT, 10)} // Left wall
+        {createWall([halfWidth, 0, 0], 0.1, WALL_HEIGHT, 10)} // Right wall
     </>
 }

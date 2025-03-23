@@ -14,6 +14,16 @@ export function Spotlights({halfDepth}: Props){
               color={0x00ffff}
               target-position={[0, 0, 0]}
             />
+            <spotLight 
+              position={[0, 5, 0]} 
+              angle={Math.PI / 2}
+              penumbra={0.3}
+              intensity={50}      
+              distance={20}
+              castShadow={true}
+              color={0xffffff}
+              target-position={[-halfDepth, 0, -halfDepth]}
+            />
              <spotLight 
                 position={[- halfDepth / 2 + 0.5, 5, - halfDepth + 1.4]}
                 angle={Math.PI / 4}

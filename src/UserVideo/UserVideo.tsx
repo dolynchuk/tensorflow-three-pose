@@ -5,36 +5,34 @@ import { updatePose } from "../inMemory";
 import { drawFlippedVideo, VIDEO_CONFIG } from "./utils";
 import * as tf from "@tensorflow/tfjs-core";
 import "@tensorflow/tfjs-backend-webgl";
-import * as poseDetection from '@tensorflow-models/pose-detection';
+import * as poseDetection from "@tensorflow-models/pose-detection";
 import { BASE } from "../constants";
 
 export const UserVideo = () => {
-
   const {
     videoStream,
     stopVideo,
     startVideo,
     startAudio,
     isMuted,
-    // muteAudio,
-    // unmuteAudio,
     videoEnabled,
   } = useContext(UserStreamContext);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameIdRef = useRef<number | null>(null);
-  const detectorRef = useRef<poseDetection.PoseDetector>(null);
+  const poseAnimationFrameIdRef = useRef<number | null>(null);
+  const detectorRef = useRef<poseDetection.PoseDetector | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function loadDetector() {
       await tf.ready();
       await tf.setBackend("webgl");
-      detectorRef.current = await poseDetection.createDetector(poseDetection.SupportedModels.BlazePose, {
-        runtime: 'tfjs',
-        enableSmoothing: true,
-      });
+      detectorRef.current = await poseDetection.createDetector(
+        poseDetection.SupportedModels.BlazePose,
+        { runtime: "tfjs", enableSmoothing: true }
+      );
       setIsLoading(false);
     }
     setIsLoading(true);
@@ -42,47 +40,57 @@ export const UserVideo = () => {
   }, []);
 
   const detectPoses = useCallback(async () => {
-    if (!videoRef.current || !detectorRef.current || !canvasRef.current) return;
+    if (!videoRef.current || !detectorRef.current) return;
     const poses = await detectorRef.current.estimatePoses(videoRef.current);
 
-    if (poses[0]){
+    if (poses[0]) {
       updatePose(poses[0]);
     }
 
+    poseAnimationFrameIdRef.current = requestAnimationFrame(detectPoses);
+  }, []);
+
+  const renderFlippedVideo = useCallback(() => {
+    if (!videoRef.current || !canvasRef.current) return;
     drawFlippedVideo(canvasRef.current, videoRef.current);
-    animationFrameIdRef.current = requestAnimationFrame(detectPoses);
+    animationFrameIdRef.current = requestAnimationFrame(renderFlippedVideo);
   }, []);
 
   useEffect(() => {
-    if (!videoRef.current || !canvasRef.current || !detectorRef.current) return;
+    if (!videoRef.current || !canvasRef.current) return;
     const video = videoRef.current;
 
     const handleVideoLoad = () => {
-      if (video.videoWidth === 0 || video.videoHeight === 0 || !canvasRef.current) return;
-      canvasRef.current.width = video.videoWidth;
-      canvasRef.current.height = video.videoHeight;
-      if (videoEnabled) detectPoses();
+      if (video.videoWidth === 0 || video.videoHeight === 0) return;
+      if (canvasRef.current) {
+        canvasRef.current.width = video.videoWidth;
+        canvasRef.current.height = video.videoHeight;
+      }
+      if (videoEnabled) {
+        renderFlippedVideo();
+        detectPoses();
+      }
     };
 
     video.srcObject = videoStream;
     video.onloadedmetadata = handleVideoLoad;
     video.onerror = () => console.error("Video loading error");
-    if (videoEnabled) video.play().catch(err => console.warn("Video play error:", err));
+    if (videoEnabled) {
+      video.play().catch((err) => console.warn("Video play error:", err));
+    }
 
-    const canvas = canvasRef.current;
     return () => {
       if (animationFrameIdRef.current) {
         cancelAnimationFrame(animationFrameIdRef.current);
         animationFrameIdRef.current = null;
       }
-    
-      if (!canvas){
-        return;
+      if (poseAnimationFrameIdRef.current) {
+        cancelAnimationFrame(poseAnimationFrameIdRef.current);
+        poseAnimationFrameIdRef.current = null;
       }
-      const ctx = canvas.getContext("2d");
-      ctx?.clearRect(0, 0, canvas.width, canvas.height);
+      canvasRef.current?.getContext("2d")?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     };
-  }, [videoStream, detectPoses, videoEnabled]);
+  }, [videoStream, detectPoses, renderFlippedVideo, videoEnabled]);
 
   const handleVideoToggle = () => {
     if (!canvasRef.current) return;
@@ -116,8 +124,14 @@ export const UserVideo = () => {
       <video ref={videoRef} width={VIDEO_CONFIG.width} height={VIDEO_CONFIG.height} muted={isMuted} className="videoHidden" autoPlay />
       <canvas className="videoCanvas" ref={canvasRef} width={VIDEO_CONFIG.width} height={VIDEO_CONFIG.height} />
       <div className="userVideoControls">
-        <button className={`controlsButton ${isLoading ? 'loading' : ''}`} onClick={handleVideoToggle} disabled={isLoading}>
-          {isLoading ? <img src={`${BASE}loading.svg`}/> :  videoEnabled ? <img src={`${BASE}video-on.svg`} /> : <img src={`${BASE}video-off.svg`} />}
+        <button className={`controlsButton ${isLoading ? "loading" : ""}`} onClick={handleVideoToggle} disabled={isLoading}>
+          {isLoading ? (
+            <img src={`${BASE}loading.svg`} />
+          ) : videoEnabled ? (
+            <img src={`${BASE}video-on.svg`} />
+          ) : (
+            <img src={`${BASE}video-off.svg`} />
+          )}
         </button>
       </div>
     </div>

@@ -19,7 +19,7 @@ export const Speaker = ({ position }: { position: number[] }) => {
   });
 
   return (
-    <mesh ref={speakerRef} position={new Vector3(position[0], position[1], position[2])} rotation={[0, Math.PI / 4, 0]}>
+    <mesh ref={speakerRef} position={new Vector3(position[0], position[1], position[2])} rotation={[0, 0, 0]}>
       <primitive object={speakerMesh} />
     </mesh>
   );

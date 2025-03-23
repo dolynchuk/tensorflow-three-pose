@@ -9,6 +9,18 @@ const LIMB_CONNECTIONS = [
     [24, 26], [26, 28], [28, 32], // Right leg
   ];
   
+
+const material =  <meshPhysicalMaterial 
+    color={0x000000}
+    emissive={0xffffff}
+    emissiveIntensity={0.1}
+    roughness={0.5} 
+    metalness={0}
+    clearcoat={1}
+    clearcoatRoughness={0.5}
+/>;
+
+
 export const Player = () => {
   const [keypoints, setKeypoints] = useState<{x?: number; y?: number; z?: number;}[]>([]);
 
@@ -22,6 +34,7 @@ export const Player = () => {
     updatePose();
   }, []);
 
+
   return (
     <group rotation={[Math.PI, 0, 0]}> {/* Add this rotation to flip 180° around X */}
       {keypoints.map((pos, i) => {
@@ -31,13 +44,7 @@ export const Player = () => {
         return (
           <mesh key={i} position={[pos.x, pos.y, pos.z]}>
             <sphereGeometry args={[0.05, 16, 16]} />
-            <meshPhysicalMaterial 
-              color={0xffffff} 
-              roughness={0.2}
-              metalness={1}
-              clearcoat={1} 
-              clearcoatRoughness={0}
-            />
+            {material}
           </mesh>
         );
       })}
@@ -56,13 +63,7 @@ export const Player = () => {
         return (
           <mesh key={index} position={mid} quaternion={quaternion}>
           <capsuleGeometry args={[0.02, length, 10, 8]} />
-          <meshPhysicalMaterial 
-            color={0xffffff}
-            roughness={0.2} 
-            metalness={1}
-            clearcoat={1}
-            clearcoatRoughness={0}
-          />
+            {material}
           </mesh>
         );
       })}
